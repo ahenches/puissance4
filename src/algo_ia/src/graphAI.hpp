@@ -29,8 +29,13 @@ class GraphAI{
     Node *msRoot = new Node("0000000000000000000000000");
     // Node msActual;
 
+    /**
+     * @brief Le fichier ou l on stocke le graphe
+     * 
+     */
+    char *mwFileName;
     public:
-    GraphAI();
+    GraphAI(char *pwFileName);
     void exportToFile();
     void importFromFile();
     std::vector<std::string> cutString(std::string pwLine, char pwDelimiter);
