@@ -3,9 +3,10 @@
 
 using namespace std;
 
-GraphAI::GraphAI()
+GraphAI::GraphAI(char *pwFileName)
 {
     msGraphMap[msRoot->getPositionName()] = msRoot;
+    mwFileName = pwFileName;
 }
 
 /*/////////////////////////////////////////////////////////////////////////////
@@ -21,7 +22,7 @@ But de la fonction :
 /////////////////////////////////////////////////////////////////////////////*/
 void GraphAI::exportToFile() //ecriture
 {
-    ofstream lsFile(FILE_NAME);  //Ouverture en ecriture du fichier
+    ofstream lsFile(mwFileName);  //Ouverture en ecriture du fichier
     Node *lsCurrentNode;
     map<string, Node *>::iterator liMapIterator;
     int liNumberSon;
@@ -30,29 +31,7 @@ void GraphAI::exportToFile() //ecriture
 
     if(lsFile)
     {
-        // On s'occupe d'abord de la racine (premiere ligne du fichier)
-        //Ecriture du nom du noeud racine
-       /* lsFile << msRoot->getPositionName() << " ";
-        cout << msRoot->getPositionName() << " ";
-        
-        lwSonsName = msRoot->getChildren();
-        lnSize = 5;
-        //Pour chaque fils existant ont ecrit son indice dans le tableau de fils et son nom
-        for(liNumberSon = 0; liNumberSon < lnSize; liNumberSon++)
-        {
-            if(lwSonsName[liNumberSon] != "")
-            {
-                lsFile << liNumberSon << " " << lwSonsName[liNumberSon] << " ";
-                cout << liNumberSon << " " << lwSonsName[liNumberSon] << " ";
-            }
-            else // ne rien faire
-            {}
-        }
-        lsFile << endl;
-        cout << endl;
-        */
-
-        //On s'occupe ensuite des autres noeuds du graphe
+        //On s'occupe des noeuds du graphe
         for(liMapIterator = msGraphMap.begin(); liMapIterator != msGraphMap.end(); liMapIterator++)
         {
             lsCurrentNode = liMapIterator -> second;
@@ -98,7 +77,7 @@ But de la fonction :
 /////////////////////////////////////////////////////////////////////////////*/
 void GraphAI::importFromFile()//lecture
 {
-    ifstream lsFile(FILE_NAME);
+    ifstream lsFile(mwFileName);
     int liIndex;
     vector<string> lvLineCuts;
     string *lvSonsName;
