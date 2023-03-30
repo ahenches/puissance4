@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <unistd.h>
 #include <fstream>
 #include "node.hpp"
 #include "boardGame.hpp"
@@ -47,6 +48,8 @@ class GraphAI{
     std::map<std::string, Node *>& getGraphMap();
     Node *getRoot();
     void addNodetoMap(Node *psNode);
+
+    Node *getNode(std::string lwPosition);
 
     void deleteNodes();
 };

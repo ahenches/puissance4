@@ -77,6 +77,11 @@ But de la fonction :
 /////////////////////////////////////////////////////////////////////////////*/
 void GraphAI::importFromFile()//lecture
 {
+    if (access(mwFileName, F_OK) != 0) // fichier n'existe pas 
+    {
+        return ;
+    }
+
     ifstream lsFile(mwFileName);
     int liIndex;
     vector<string> lvLineCuts;
@@ -269,6 +274,18 @@ Nom du package : AI
 Node *GraphAI::getRoot()
 {
     return msRoot;
+}
+
+Node *GraphAI::getNode(string pwPositionRepresentation)
+{
+    if(msGraphMap.find(pwPositionRepresentation) != msGraphMap.end()) // Le fils n'existe pas dans le graphe
+    {
+        return msGraphMap[pwPositionRepresentation];
+    }
+    else 
+    {
+        return NULL;
+    }
 }
 
 void GraphAI::addNodetoMap(Node *psNode)

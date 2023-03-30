@@ -6,18 +6,28 @@
 #include <cstring>
 #include <vector>
 
+#define PARTICULAR_GRAPH 
+
 using namespace std;
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction doGame()
 
-void doGame(GraphAI *graph, char *mode)
+Auteur : Arnaud HENCHES (IATIC-4)
+Nom du projet : Robot Niryo - Puissance 4
+Nom du package : AI
+
+But de la fonction :
+  Exécute le kernel (2 ordinateurs jouent ensemble afin d'étoffer l'ia
+
+/////////////////////////////////////////////////////////////////////////////*/
+void doGame(vector<GraphAI> *lvGraphs, char *lwMode)
 {
-    //vector<string *> lvEncounteredPositions;
-    //lvEncounteredPositions.reserve(cnSIZE_OF_BOARD * cnSIZE_OF_BOARD);
-    //vector<string *>::iterator lnEncounteredIterator;
-    //lnEncounteredIterator = lvEncounteredPositions.begin();
-
-    // Node *lsActual = graph->getRoot();
-    map<std::string, Node *>& lsGraphMap = graph->getGraphMap();
+    vector<string> lvEncounteredPositions;
+    lvEncounteredPositions.reserve(cnSIZE_OF_BOARD * cnSIZE_OF_BOARD);
+    vector<string>::iterator lnEncounteredIterator;
+    lnEncounteredIterator = lvEncounteredPositions.begin();
+    
     string lsActual = graph->getRoot()->getPositionName();
     
     int lvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD] = {{0}};
@@ -26,23 +36,21 @@ void doGame(GraphAI *graph, char *mode)
     bool lbIsPlayed;
 
 
-    //gameDisplay(lvBoardGame);
     lnPositionStatus = gnGameNotFinished;
     lnCurrentPlayer = cnIA;
     lnMoveCounter = 0;
     
     gameDisplay(lvBoardGame);
-    //cout << calculateBestMove(lvBoardGame) << endl;
     while(lnPositionStatus == gnGameNotFinished)
     {
         lbIsPlayed = false;
         while (!lbIsPlayed)
         {
-            if(strcmp("rand", mode) == 0) 
+            if(strcmp("rand", lwMode) == 0) 
             {
                 lnSelectedColomn = moveAtRandom(lvBoardGame);
             }
-            else if (strcmp("algo", mode) == 0)
+            else if (strcmp("algo", lwMode) == 0)
             { 
                 lnSelectedColomn = calculateBestMove(lvBoardGame);
             }
@@ -50,31 +58,27 @@ void doGame(GraphAI *graph, char *mode)
             tie(lbIsPlayed,lnRowPlayed) = play(lvBoardGame,lnSelectedColomn, lnCurrentPlayer); 
         }
         cout << "Ceci est la colonne jouée " << lnSelectedColomn << endl;
-        string lwNextNodeRepr = lsGraphMap[lsActual]->calculateNewPositionValue(lnSelectedColomn, lnMoveCounter);
+        string lwNextNodeRepr = *(lvGraph)[0].getNode(lsActual)->calculateNewPositionValue(lnSelectedColomn, lnMoveCounter);
         graph->appendChildToParent(lsActual, lnSelectedColomn, lwNextNodeRepr);
         lsActual = move(lwNextNodeRepr);
-        // cout << "CC " << *lnEncounteredIterator << endl;
-        //cout << "SIZE lvEncounteredPositions " << lvEncounteredPositions.size() << endl;
-        // lvEncounteredPositions[lnMoveCounter] = lsActual->getPositionName();
         gameDisplay(lvBoardGame);
-        //cout << "Le string : " << endl << Node::printPositionName(lsActual->getPositionName()) << endl;
-        // lnEncounteredIterator = lvEncounteredPositions.insert(lnEncounteredIterator, lsActual->getPositionName());
-        // string h = lsActual->getPositionName();
-        //lvEncounteredPositions.push_back(&h);
+        lnEncounteredIterator = lvEncounteredPositions.insert(lnEncounteredIterator, lsActual->getPositionName());
         
-        // gameDisplay(lvBoardGame);
         lnPositionStatus = whatGameStatus(lvBoardGame,lnCurrentPlayer);
 
         lnCurrentPlayer = (lnCurrentPlayer) % 2 + 1;
         
         lnMoveCounter++;
-
-        //cout << lvEncounteredPositions.size() << endl;
     }
     //for (int i = 0; i < lvEncounteredPositions.size(); i++)
     //    cout << (new Node)->printPositionName(lvEncounteredPositions[i]) << endl;
 
-    //graph->calculateWeights(lvEncounteredPositions, false);
+    graph->calculateWeights(lvEncounteredPositions, false);
+    for (auto lsGraph : lvGraphs)
+    {
+        lsGraph.exportToFile();
+        lsGraph.deleteNodes();
+    }
     if (lnPositionStatus != gnStaleMate)
     {
 
@@ -93,26 +97,43 @@ void doGame(GraphAI *graph, char *mode)
     }
 }
 
-int main(int argc, char **argv) // nb_parties, mode
+int main(int argc, char **argv) // nb_parties, lwMode
 {
     if (argc != 3)
     {
-        printf("Erreur nombre d'arguments invalide.\nUtilisation : ./<executable> <nb_parties> <mode>\n");
+        printf("Erreur nombre d'arguments invalide.\nUtilisation : ./<executable> <nb_parties> <lwMode>\n");
         exit(1);
     }
     else 
     {
         int lnNbReps = atoi(argv[1]);
-        char *mode = argv[2];
-        GraphAI graph;
+        char *lwMode = argv[2];
+        
+        vector<GraphAI> lvGraphs;
+
+        GraphAI lsMainGraph(MAIN_GRAPH);
+        lvGraphs.push_back(lsMainGraph);
+        
+        GraphAI lsParticularGraph(PARTICULAR_GRAPH);
+        lvGraphs.push_back(lsParticularGraph);
+
+        cout << "Graphs import" << endl;
+        for (auto lsGraph : lvGraphs)
+        {
+            lsGraph.importFromFile();
+        }
+        
         for (int i = 0 ; i < lnNbReps; i++)
         {
-            doGame(&graph, mode);
+            doGame(&lvGraphs, lwMode);
         }
 
-        cout << endl << "Graph1 export" << endl;
-        graph.exportToFile();
-        graph.deleteNodes();
+        cout << "Graphs export" << endl;
+        for (auto lsGraph : lvGraphs)
+        {
+            lsGraph.exportToFile();
+            lsGraph.deleteNodes();
+        }
         return 0;
     }
 }
