@@ -101,16 +101,18 @@ Sortie :
 /////////////////////////////////////////////////////////////////////////////*/
 int whichColumnHasBeenPlayed(int pvOldBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD], int pvNewBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD])
 {
+    int lnColumnPlayed = -1;
     for(int l = 0; l < cnSIZE_OF_BOARD; l++)
     {
         for(int c = 0; c < cnSIZE_OF_BOARD; c++)
         {
             if(pvOldBoardGame[l][c] == 0 && pvNewBoardGame[l][c] != 0)
             {
-                return c;
+                lnColumnPlayed = c;
             }
         }
     }
+    return lnColumnPlayed;
 }
 
 

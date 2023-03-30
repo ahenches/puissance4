@@ -4,7 +4,7 @@ endif
 ifeq ($(origin FOO), default)
 CC = g++
 endif
-FLAGS=-Wall -g -O0 -std=c++17 -D_GLIBCXX_DEBUG
+FLAGS=-Wall -g -std=c++17
 
 
 all : clean PLAY learning
