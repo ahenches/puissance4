@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
 
-    GraphAI graph;
+    GraphAI graph(MAIN_GRAPH);
     graph.importFromFile();
     map<std::string, Node *>& lsGraphMap = graph.getGraphMap();
     vector<string> lvEncounteredPositions;

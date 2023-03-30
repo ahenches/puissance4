@@ -9,7 +9,7 @@
 #include "node.hpp"
 #include "boardGame.hpp"
 
-#define FILE_NAME "./src/files/graphAI.txt"
+#define MAIN_GRAPH "./src/files/graphAI.txt"
 /**
  * @brief classe representant le graphe de l'IA
  * 
@@ -33,9 +33,9 @@ class GraphAI{
      * @brief Le fichier ou l on stocke le graphe
      * 
      */
-    char *mwFileName;
+    char const *mwFileName;
     public:
-    GraphAI(char *pwFileName);
+    GraphAI(char const *pwFileName);
     void exportToFile();
     void importFromFile();
     std::vector<std::string> cutString(std::string pwLine, char pwDelimiter);

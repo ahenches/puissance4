@@ -3,7 +3,7 @@
 
 using namespace std;
 
-GraphAI::GraphAI(char *pwFileName)
+GraphAI::GraphAI(char const *pwFileName)
 {
     msGraphMap[msRoot->getPositionName()] = msRoot;
     mwFileName = pwFileName;
