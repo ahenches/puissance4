@@ -2,11 +2,10 @@
 
 #include "graphAI.hpp"
 #include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <cstring>
 #include <vector>
-
-#define PARTICULAR_GRAPH 
 
 using namespace std;
 
@@ -40,7 +39,7 @@ void doGame(vector<GraphAI *> *lvGraphs, char *lwMode)
     lnCurrentPlayer = cnIA;
     lnMoveCounter = 0;
     
-    gameDisplay(lvBoardGame);
+    // gameDisplay(lvBoardGame);
     while(lnPositionStatus == gnGameNotFinished)
     {
         lbIsPlayed = false;
@@ -54,15 +53,30 @@ void doGame(vector<GraphAI *> *lvGraphs, char *lwMode)
             { 
                 lnSelectedColomn = calculateBestMove(lvBoardGame);
             }
-            cout << "lsActual " << lsActual << endl;
+            else if (strcmp("mixte", lwMode) == 0)
+            {
+                const int lnMiddleVal = RAND_MAX / 2; 
+                const int lnRandomVal = rand();
+                cout << "VALEUR : " << (lnRandomVal - lnMiddleVal) << endl;
+                if(lnRandomVal > lnMiddleVal)
+                {
+                    cout << "Deplacement erratiques" << endl;
+                    lnSelectedColomn = moveAtRandom(lvBoardGame);
+                }
+                else
+                {
+                    cout << "Deplacements réfléchis " << endl;
+                    lnSelectedColomn = calculateBestMove(lvBoardGame);
+                }
+            }
             tie(lbIsPlayed,lnRowPlayed) = play(lvBoardGame,lnSelectedColomn, lnCurrentPlayer);
         }
         cout << "Ceci est la colonne jouée " << lnSelectedColomn << endl;
         string lwNextNodeRepr = ((*lvGraphs)[0])->getNode(lsActual)->calculateNewPositionValue(lnSelectedColomn, lnMoveCounter);
-	for (GraphAI * lsGraph : *lvGraphs)
-        lsGraph->appendChildToParent(lsActual, lnSelectedColomn, lwNextNodeRepr);
+	    for (GraphAI * lsGraph : *lvGraphs)
+            lsGraph->appendChildToParent(lsActual, lnSelectedColomn, lwNextNodeRepr);
         lsActual = move(lwNextNodeRepr);
-        gameDisplay(lvBoardGame);
+        // gameDisplay(lvBoardGame);
         lnEncounteredIterator = lvEncounteredPositions.insert(lnEncounteredIterator, lsActual);
         
         lnPositionStatus = whatGameStatus(lvBoardGame,lnCurrentPlayer);
@@ -71,20 +85,10 @@ void doGame(vector<GraphAI *> *lvGraphs, char *lwMode)
         
         lnMoveCounter++;
     }
-    //for (int i = 0; i < lvEncounteredPositions.size(); i++)
-    //    cout << (new Node)->printPositionName(lvEncounteredPositions[i]) << endl;
 
     if (lnPositionStatus != gnStaleMate)
     {
-
-        if(lnCurrentPlayer == cnIA)
-        {
-            cout << "Vous avez gagné  " << endl;
-        }
-        else
-        {
-            cout << "Le gagnant est l'IA  " << endl;
-        }
+        cout << lnCurrentPlayer << " gagne !" << endl;
         for (GraphAI * lsGraph : *lvGraphs)
             lsGraph->calculateWeights(lvEncounteredPositions, false);
     }
@@ -108,13 +112,18 @@ int main(int argc, char **argv) // nb_parties, lwMode
         char * lwNbReps = argv[1];
         int lnNbReps = atoi(lwNbReps);
         char * lwMode = argv[2];
-        char lwGraphParticular[12+strlen(lwMode)+1+strlen(lwNbReps)+4] = "files/graph_";
+        const int lnGraphParticularWordLength = 12 + 1 + strlen(lwMode) + 4 + strlen(lwNbReps) + 1;
+        char lwGraphParticular[lnGraphParticularWordLength];
+        strcat(lwGraphParticular, "files/graph_");  
         strcat(lwGraphParticular, lwMode);  
         strcat(lwGraphParticular, "_");  
         strcat(lwGraphParticular, lwNbReps);        
         strcat(lwGraphParticular, ".txt");        
         
-        printf("%s\n", lwGraphParticular);
+        srand(time(NULL));
+
+        cout << "Graphe principal enregistré dans : " << MAIN_GRAPH << endl;
+        cout << "Graphe particulier enregistré dans : " << lwGraphParticular << endl;
 
         vector<GraphAI *> lvGraphs;
         
@@ -122,18 +131,19 @@ int main(int argc, char **argv) // nb_parties, lwMode
         lvGraphs.push_back(new GraphAI(MAIN_GRAPH));
         lvGraphs.push_back(new GraphAI(lwGraphParticular));
 
-        cout << "Graphs import" << endl;
+        cout << "||||Graphs import||||" << endl;
         for (GraphAI * lsGraph : lvGraphs)
         {
             lsGraph->importFromFile();
         }
-        
+       
         for (int i = 0 ; i < lnNbReps; i++)
         {
+            cout << "||||Partie " << (i + 1) << "||||" << endl;
             doGame(&lvGraphs, lwMode);
         }
 
-        cout << "Graphs export" << endl;
+        cout << "||||Graphs export||||" << endl;
         for (GraphAI * lsGraph : lvGraphs)
         {
             lsGraph->exportToFile();
