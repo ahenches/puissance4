@@ -7,6 +7,8 @@
 #include <vector>
 #include <unistd.h>
 #include <fstream>
+#include <stdlib.h>
+#include <stdio.h>
 #include "node.hpp"
 #include "boardGame.hpp"
 
