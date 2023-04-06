@@ -44,9 +44,7 @@ void GraphAI::exportToFile() //ecriture
             lsCurrentNode = liMapIterator -> second;
             //Ecriture du nom du noeud coourant et de ses informations concernant son poids
             lsFile << lsCurrentNode->getPositionName() << " ";
-            cout << lsCurrentNode->getPositionName() << " ";
             lsFile << lsCurrentNode->getWeight().mnGamePlayed << " "  << lsCurrentNode->getWeight().mnGameWon << " " << lsCurrentNode->getWeight().mnVictoryRate << " ";
-            cout << lsCurrentNode->getWeight().mnGamePlayed << " "  << lsCurrentNode->getWeight().mnGameWon << " " << lsCurrentNode->getWeight().mnVictoryRate << " ";
             
             lwSonsName = lsCurrentNode->getChildren();
             lnSize = 5;
@@ -56,13 +54,11 @@ void GraphAI::exportToFile() //ecriture
                 if(lwSonsName[liNumberSon] != "")
                 {
                     lsFile << liNumberSon << " " << lwSonsName[liNumberSon] << " ";
-                    cout << liNumberSon << " " << lwSonsName[liNumberSon] << " ";
                 }
                 else // ne rien faire
                 {}
             }
             lsFile << endl;
-            cout << endl;
         }
     }
     else // Probleme ouverture du fichier
@@ -105,9 +101,7 @@ void GraphAI::importFromFile()//lecture
         for(liIndex = 4 ; liIndex < (int)lvLineCuts.size(); liIndex+= 2)
         {
             msRoot->getChildren()[stoi(lvLineCuts[liIndex])] = lvLineCuts[liIndex + 1];
-            cout << stoi(lvLineCuts[liIndex]) << " " << lvLineCuts[liIndex + 1] << " ";
         }
-        cout << msRoot->getPositionName() << " " << endl;
         //Traitement des autres noeuds
         while(getline(lsFile, lwLine)){
             lvLineCuts = cutString(lwLine,' ');
@@ -118,11 +112,9 @@ void GraphAI::importFromFile()//lecture
             for(liIndex = 4; liIndex < (int)lvLineCuts.size(); liIndex+= 2)
             {
                 lvSonsName[stoi(lvLineCuts[liIndex])] = lvLineCuts[liIndex + 1];
-                cout << stoi(lvLineCuts[liIndex]) << " " << lvLineCuts[liIndex + 1] << " ";
                 
             }
             msGraphMap[lvLineCuts[0]] = lsCurrentNode;
-            cout << endl;
         }        
     }
     else 
@@ -261,7 +253,6 @@ void GraphAI::calculateWeights(vector <string> pvEncounteredNodes, bool pbStaleF
     int lnTailleEncounteredNode = pvEncounteredNodes.size(), lnIterator = 0;
     for(string lsCurentPositionName : pvEncounteredNodes)
     {
-        cout << "Nom position : "<< lsCurentPositionName << endl;
         lsWeights = msGraphMap[lsCurentPositionName]->getWeight();
         lsWeights.mnGamePlayed += 1;
         if(!pbStaleFinish && (lnTailleEncounteredNode - lnIterator) % 2 == 1)
