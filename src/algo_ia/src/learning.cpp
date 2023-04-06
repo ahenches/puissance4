@@ -18,17 +18,17 @@ Nom du projet : Robot Niryo - Puissance 4
 Nom du package : AI
 
 But de la fonction :
-  Exécute le kernel (2 ordinateurs jouent ensemble afin d'étoffer l'ia
+  Exécute le kernel (2 ordinateurs jouent ensemble afin d'étoffer l'ia)
 
 /////////////////////////////////////////////////////////////////////////////*/
-void doGame(vector<GraphAI> *lvGraphs, char *lwMode)
+void doGame(vector<GraphAI *> *lvGraphs, char *lwMode)
 {
     vector<string> lvEncounteredPositions;
     lvEncounteredPositions.reserve(cnSIZE_OF_BOARD * cnSIZE_OF_BOARD);
     vector<string>::iterator lnEncounteredIterator;
     lnEncounteredIterator = lvEncounteredPositions.begin();
     
-    string lsActual = graph->getRoot()->getPositionName();
+    string lsActual = ((*lvGraphs)[0])->getRoot()->getPositionName();
     
     int lvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD] = {{0}};
     int lnCurrentPlayer, lnSelectedColomn, lnRowPlayed, lnMoveCounter;
@@ -55,14 +55,15 @@ void doGame(vector<GraphAI> *lvGraphs, char *lwMode)
                 lnSelectedColomn = calculateBestMove(lvBoardGame);
             }
             cout << "lsActual " << lsActual << endl;
-            tie(lbIsPlayed,lnRowPlayed) = play(lvBoardGame,lnSelectedColomn, lnCurrentPlayer); 
+            tie(lbIsPlayed,lnRowPlayed) = play(lvBoardGame,lnSelectedColomn, lnCurrentPlayer);
         }
         cout << "Ceci est la colonne jouée " << lnSelectedColomn << endl;
-        string lwNextNodeRepr = *(lvGraph)[0].getNode(lsActual)->calculateNewPositionValue(lnSelectedColomn, lnMoveCounter);
-        graph->appendChildToParent(lsActual, lnSelectedColomn, lwNextNodeRepr);
+        string lwNextNodeRepr = ((*lvGraphs)[0])->getNode(lsActual)->calculateNewPositionValue(lnSelectedColomn, lnMoveCounter);
+	for (GraphAI * lsGraph : *lvGraphs)
+        lsGraph->appendChildToParent(lsActual, lnSelectedColomn, lwNextNodeRepr);
         lsActual = move(lwNextNodeRepr);
         gameDisplay(lvBoardGame);
-        lnEncounteredIterator = lvEncounteredPositions.insert(lnEncounteredIterator, lsActual->getPositionName());
+        lnEncounteredIterator = lvEncounteredPositions.insert(lnEncounteredIterator, lsActual);
         
         lnPositionStatus = whatGameStatus(lvBoardGame,lnCurrentPlayer);
 
@@ -73,12 +74,6 @@ void doGame(vector<GraphAI> *lvGraphs, char *lwMode)
     //for (int i = 0; i < lvEncounteredPositions.size(); i++)
     //    cout << (new Node)->printPositionName(lvEncounteredPositions[i]) << endl;
 
-    graph->calculateWeights(lvEncounteredPositions, false);
-    for (auto lsGraph : lvGraphs)
-    {
-        lsGraph.exportToFile();
-        lsGraph.deleteNodes();
-    }
     if (lnPositionStatus != gnStaleMate)
     {
 
@@ -90,10 +85,14 @@ void doGame(vector<GraphAI> *lvGraphs, char *lwMode)
         {
             cout << "Le gagnant est l'IA  " << endl;
         }
+        for (GraphAI * lsGraph : *lvGraphs)
+            lsGraph->calculateWeights(lvEncounteredPositions, false);
     }
     else 
     {
         cout << "Le Match est ex aequo  " << endl;
+        for (GraphAI * lsGraph : *lvGraphs)
+            lsGraph->calculateWeights(lvEncounteredPositions, true);
     }
 }
 
@@ -106,21 +105,25 @@ int main(int argc, char **argv) // nb_parties, lwMode
     }
     else 
     {
-        int lnNbReps = atoi(argv[1]);
-        char *lwMode = argv[2];
-        
-        vector<GraphAI> lvGraphs;
+        char * lwNbReps = argv[1];
+        int lnNbReps = atoi(lwNbReps);
+        char * lwMode = argv[2];
+        char lwGraphParticular[6+strlen(lwMode)+1+strlen(lwNbReps)];
+        strcpy(lwGraphParticular, "graph_");  
+        strcpy(lwGraphParticular, lwMode);  
+        strcpy(lwGraphParticular, "_");  
+        strcpy(lwGraphParticular, lwNbReps);        
 
-        GraphAI lsMainGraph(MAIN_GRAPH);
-        lvGraphs.push_back(lsMainGraph);
+        vector<GraphAI *> lvGraphs;
         
-        GraphAI lsParticularGraph(PARTICULAR_GRAPH);
-        lvGraphs.push_back(lsParticularGraph);
+        
+        lvGraphs.push_back(new GraphAI(MAIN_GRAPH));
+        lvGraphs.push_back(new GraphAI(lwGraphParticular));
 
         cout << "Graphs import" << endl;
-        for (auto lsGraph : lvGraphs)
+        for (GraphAI * lsGraph : lvGraphs)
         {
-            lsGraph.importFromFile();
+            lsGraph->importFromFile();
         }
         
         for (int i = 0 ; i < lnNbReps; i++)
@@ -129,10 +132,12 @@ int main(int argc, char **argv) // nb_parties, lwMode
         }
 
         cout << "Graphs export" << endl;
-        for (auto lsGraph : lvGraphs)
+        for (GraphAI * lsGraph : lvGraphs)
         {
-            lsGraph.exportToFile();
-            lsGraph.deleteNodes();
+            lsGraph->exportToFile();
+
+            lsGraph->deleteNodes();
+            delete(lsGraph);
         }
         return 0;
     }
