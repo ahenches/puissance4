@@ -9,14 +9,14 @@ FLAGS=-Wall -g -std=c++17
 
 all : clean PLAY learning
 
-PLAY : src/boardGame.cpp src/graphAI.cpp src/node.cpp src/game.cpp
+PLAY : boardGame.cpp graphAI.cpp node.cpp game.cpp
 		$(CC) $(FLAGS) -o $@ $^
 
-learning : src/boardGame.cpp src/graphAI.cpp src/node.cpp src/learning.cpp
+learning : boardGame.cpp graphAI.cpp node.cpp learning.cpp
 		$(CC) $(FLAGS) -o $@ $^
 
-test : clean src/boardGame.cpp src/graphAI.cpp src/node.cpp src/testAI.cpp
+test : clean boardGame.cpp graphAI.cpp node.cpp testAI.cpp
 		$(CC) $(FLAGS) -o $@ $^
 
 clean : 
-		rm -f src/*~ *~ test learning PLAY 
+		rm -f *~ *~ test learning PLAY 
