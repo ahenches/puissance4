@@ -100,7 +100,7 @@ int main(int argc, char **argv) // nb_parties, lwMode
 {
     if (argc != 3)
     {
-        cout << "Erreur nombre d'arguments invalide.\nUtilisation : ./<executable> <nb_parties> <lwMode>\n" << endl;
+        cout << "Erreur nombre d'arguments invalide.\nUtilisation : ./<executable> <nombre de parties> <mode>\n" << endl;
         exit(1);
     }
     else 
@@ -108,11 +108,13 @@ int main(int argc, char **argv) // nb_parties, lwMode
         char * lwNbReps = argv[1];
         int lnNbReps = atoi(lwNbReps);
         char * lwMode = argv[2];
-        char lwGraphParticular[6+strlen(lwMode)+1+strlen(lwNbReps)];
-        strcpy(lwGraphParticular, "graph_");  
-        strcpy(lwGraphParticular, lwMode);  
-        strcpy(lwGraphParticular, "_");  
-        strcpy(lwGraphParticular, lwNbReps);        
+        char lwGraphParticular[12+strlen(lwMode)+1+strlen(lwNbReps)+4] = "files/graph_";
+        strcat(lwGraphParticular, lwMode);  
+        strcat(lwGraphParticular, "_");  
+        strcat(lwGraphParticular, lwNbReps);        
+        strcat(lwGraphParticular, ".txt");        
+        
+        printf("%s\n", lwGraphParticular);
 
         vector<GraphAI *> lvGraphs;
         
