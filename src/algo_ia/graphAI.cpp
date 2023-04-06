@@ -32,6 +32,8 @@ void GraphAI::exportToFile() //ecriture
     lsTmpFile = fopen(mwFileName, "a"); // Verification si le fichier existe sinon il est crée
     if(lsTmpFile != NULL)
         fclose(lsTmpFile);
+    else
+        cout << "Erreur d'ouverture du fichier" << endl;
     
     ofstream lsFile(mwFileName);  //Ouverture en ecriture du fichier
     if(lsFile)
@@ -159,6 +161,26 @@ vector<string> GraphAI::cutString(string pwLine, char pwDelimiter)
     return lvLineCuts;
 }
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction playAI()
+
+Auteur : Maud Lestienne (IATIC-4)
+Nom du projet : Robot Niryo - Puissance 4
+Nom du package : AI
+
+But de la fonction :
+  L'IA peut jouer soit avec son graphe ou avec l'algorithme, 
+  Cette fonction regarde si le plateau courant est dans le graphe si oui il regarde les fils du noeud correspondant et leur valeur pour savoir si quoi jouer
+  Sinon l'IA joue avec l'algorithme de jeu
+
+Entrées :
+  pvBoardGame : Le plateau de jeu
+  psActaul : Le noeud actuel dans le jeu representant le plateau actuel
+
+Sortie : 
+  lnSelectedColomn : la colonne selectionnee pour jouer
+
+/////////////////////////////////////////////////////////////////////////////*/
 int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *psActual )
 {
     int lwChildSelected = -1;
