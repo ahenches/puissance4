@@ -9,7 +9,7 @@ Nom du projet : Robot Niryo - Puissance 4
 Nom du package : AI
 
 But de la fonction :
-  Constructeur vide
+  Constructeur de noeud initialise les poids du noeud à 0
 
 /////////////////////////////////////////////////////////////////////////////*/
 Node::Node()
@@ -42,6 +42,21 @@ Node::Node(string pwPositionName)
     }
 }
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction addChild()
+
+Auteur : Maud Lestienne (IATIC-4), Arnaud HENCHES (IATIC-4)
+Nom du projet : Robot Niryo - Puissance 4
+Nom du package : AI
+
+But de la fonction :
+  Ajoute un noeud fils au noeud
+
+Entrées :
+  pnColuln : Le numero de la colonne jouée (indice du fils dans le tableau)
+  mvChildrenName : chaine de caractere representant le nom du fils
+
+/////////////////////////////////////////////////////////////////////////////*/
 void Node::addChild(int pnColumn, std::string mvChildrenName)
 {
     mvChildren[pnColumn] = mvChildrenName;
