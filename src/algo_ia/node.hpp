@@ -21,6 +21,12 @@
  */
 #define CHAR_SEPARATOR_LINE "\n"
 
+/**
+ * @brief Structure contenant le poids d'un noeud
+ * mnGamePlayed : represente le nombre de partie passant par ce noeud
+ * mnGameWon : represente le nombre de partie gagnante pour ce noeud
+ * mnVictoryRate : represente le pourcentage de victoire du noeud 
+ */
 typedef struct weight_s {
 	int mnGamePlayed;
 	int mnGameWon;
