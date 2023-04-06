@@ -190,7 +190,6 @@ int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *ps
     if (lwChildSelected != -1)
     {
         lnSelectedColomn = lwChildSelected;
-        printf("ICI\n");
     }
     else 
     {

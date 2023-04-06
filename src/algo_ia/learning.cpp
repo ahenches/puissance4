@@ -100,7 +100,7 @@ int main(int argc, char **argv) // nb_parties, lwMode
 {
     if (argc != 3)
     {
-        printf("Erreur nombre d'arguments invalide.\nUtilisation : ./<executable> <nb_parties> <lwMode>\n");
+        cout << "Erreur nombre d'arguments invalide.\nUtilisation : ./<executable> <nb_parties> <lwMode>\n" << endl;
         exit(1);
     }
     else 

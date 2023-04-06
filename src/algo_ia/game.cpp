@@ -35,16 +35,11 @@ int main() {
         if(lnCurrentPlayer == cnIA)
         {
             cout << "C est le tour de l'IA " << endl;
-cout << "\t\t\t1:" << lsActual << endl;
             while (!lbIsPlayed)
             {
-cout << "\t\t\t2:" << lsActual << endl;
                 // Fonction a faire
-cout << "\t\t\t3:" << lsActual << endl;
                 lnSelectedColomn = graph.playAI(lvBoardGame, lsGraphMap[lsActual]);
-cout << "\t\t\t4:" << lsActual << endl;
                 tie(lbIsPlayed,lnRowPlayed) = play(lvBoardGame, lnSelectedColomn, lnCurrentPlayer); 
-cout << "\t\t\t5:" << lsActual << endl;
             }
         }
         else 
@@ -73,14 +68,9 @@ cout << "\t\t\t5:" << lsActual << endl;
         lnCurrentPlayer = (lnCurrentPlayer) % 2 + 1;
         lnMoveCounter++;
 
-        cout << lvEncounteredPositions.size() << endl;
-    }
-    for (int i = 0; i < (int)lvEncounteredPositions.size(); i++)
-        cout << (new Node)->printPositionName(lvEncounteredPositions[i]) << endl;
-
     if (lnPositionStatus != gnStaleMate)
     {
-         graph.calculateWeights(lvEncounteredPositions, false);
+        graph.calculateWeights(lvEncounteredPositions, false);
         if(lnCurrentPlayer == cnIA)
         {
             cout << "Vous avez gagné  " << endl;

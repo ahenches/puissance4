@@ -75,8 +75,6 @@ tuple <bool, int> play(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD], int pn
             liIndexRow++;
         }
     }
-    cout << "SI liIndexRow = 5 lbPlayed  = false \t\t liIndexRow :" << liIndexRow << "et lbPlayed :" << lbPlayed << endl;
-
     return make_tuple(lbPlayed, liIndexRow);
 }
 
@@ -452,7 +450,6 @@ int calculateBestMove(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD])
     int lnRowOfPiece;
     bool lbIsPiecePlayed;
     int lnValuePosition;
-    printf("HEY\n");
     int liIndexColumn = 0;
     for(; liIndexColumn < 5; liIndexColumn++)
     {
