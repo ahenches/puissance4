@@ -5,8 +5,8 @@
 
 using namespace std;
 
-int main() {
-
+int main()
+{
     GraphAI graph(MAIN_GRAPH);
     graph.importFromFile();
     map<std::string, Node *>& lsGraphMap = graph.getGraphMap();
@@ -68,6 +68,7 @@ int main() {
         lnCurrentPlayer = (lnCurrentPlayer) % 2 + 1;
         lnMoveCounter++;
 
+    }
     if (lnPositionStatus != gnStaleMate)
     {
         graph.calculateWeights(lvEncounteredPositions, false);
@@ -89,4 +90,5 @@ int main() {
     graph.exportToFile();
     graph.deleteNodes();
     return 0;
+
 }
