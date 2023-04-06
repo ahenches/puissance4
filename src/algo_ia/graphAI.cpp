@@ -22,17 +22,18 @@ But de la fonction :
 /////////////////////////////////////////////////////////////////////////////*/
 void GraphAI::exportToFile() //ecriture
 {
-    FILE *
+    FILE * lsTmpFile = NULL;
     Node *lsCurrentNode;
     map<string, Node *>::iterator liMapIterator;
     int liNumberSon;
     string *lwSonsName;
     int lnSize;
 
-    fopen(mwFileName, "w");//Ouverture en ecriture du fichier
-
-    ofstream lsFile(mwFileName);  
-
+    lsTmpFile = fopen(mwFileName, "a"); // Verification si le fichier existe sinon il est crée
+    if(lsTmpFile != NULL)
+        fclose(lsTmpFile);
+    
+    ofstream lsFile(mwFileName);  //Ouverture en ecriture du fichier
     if(lsFile)
     {
         //On s'occupe des noeuds du graphe

@@ -12,7 +12,7 @@
 #include "node.hpp"
 #include "boardGame.hpp"
 
-#define MAIN_GRAPH "./src/files/graphAI.txt"
+#define MAIN_GRAPH "files/graphAI.txt"
 /**
  * @brief classe representant le graphe de l'IA
  * 
