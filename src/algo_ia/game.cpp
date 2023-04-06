@@ -7,6 +7,23 @@ using namespace std;
 
 int main()
 {
+    int lnGameMode = gn_HARD_MODE;
+    string lw_file_path;
+    switch (lnGameMode)
+    {
+    case gn_EASY_MODE:
+        lw_file_path = MAIN_GRAPH;
+        break;
+    case gn_MEDIUM_MODE:
+        lw_file_path = MAIN_GRAPH;
+        break;
+    case gn_HARD_MODE:
+        lw_file_path = MAIN_GRAPH;
+        break;
+    default:
+        lw_file_path = MAIN_GRAPH;
+        break;
+    }
     //Importation du graphe principal de l IA 
     GraphAI graph(MAIN_GRAPH);
     graph.importFromFile();
@@ -47,7 +64,7 @@ int main()
             while (!lbIsPlayed)
             {
                 //Choix de la colonne dans laquelle jouée
-                lnSelectedColomn = graph.playAI(lvBoardGame, lsGraphMap[lsActual]);
+                lnSelectedColomn = graph.playAI(lvBoardGame, lsGraphMap[lsActual], lnGameMode);
                 //Placement du jeton et verification de a possibilite de jeu
                 tie(lbIsPlayed,lnRowPlayed) = play(lvBoardGame, lnSelectedColomn, lnCurrentPlayer); 
             }

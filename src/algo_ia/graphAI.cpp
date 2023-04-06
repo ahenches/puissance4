@@ -173,7 +173,7 @@ Sortie :
   lnSelectedColomn : la colonne selectionnee pour jouer
 
 /////////////////////////////////////////////////////////////////////////////*/
-int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *psActual )
+int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *psActual, int pnGameMode )
 {
     int lwChildSelected = -1;
     int lnSelectedColomn, liIndex;
@@ -208,7 +208,14 @@ int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *ps
     }
     else 
     {
-        lnSelectedColomn = calculateBestMove(pvBoardGame);
+        if(pnGameMode == gn_HARD_MODE)
+        {
+            lnSelectedColomn = calculateBestMove(pvBoardGame);
+        }
+        else
+        {
+            lnSelectedColomn = moveAtRandom(pvBoardGame);
+        }
     }
 
     return lnSelectedColomn ;
