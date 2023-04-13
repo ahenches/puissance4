@@ -1,3 +1,5 @@
+#include <ros/ros.h> 
+
 #include "graphAI.hpp"
 #include <stdio.h>
 #include <iostream>
