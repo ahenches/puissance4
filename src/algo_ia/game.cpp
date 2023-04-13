@@ -4,14 +4,17 @@
 #include <iostream>
 #include <vector>
 #include <boost/bind.hpp>
+#include <unistd.h>
 
 #include "graphAI.hpp"
 
 using namespace std;
+int lvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD] = {{0}};
+int lnSelectedColumn;
 
-void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg, int **pvBoardGame, int *pnSelectedColumn)
+void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg)
 {
-    //int lvMatrice[5][5];
+    int lvMatrice[5][5];
     int rows = msg->layout.dim[0].size;
     int cols = msg->layout.dim[1].size;
     int index = 0;
@@ -21,7 +24,7 @@ void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg, int **pvBoa
         for(int j = 0; j < cols; j++)
         {
             ROS_INFO("%d\t", msg->data[index]);
-            //lvMatrice[i][j] = msg->data[index];
+            lvMatrice[i][j] = msg->data[index];
             index++;
         }
         ROS_INFO("\n");
@@ -30,7 +33,9 @@ void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg, int **pvBoa
 
 int main(int argc, char **argv)
 {
-    
+    char chem[1000];
+    getcwd(chem, 1000);
+    printf("chemin courant : %s \n",chem);
     int lnGameMode = gn_EASY_MODE;
     string lw_file_path;
     switch (lnGameMode)
@@ -63,7 +68,7 @@ int main(int argc, char **argv)
     string lsActual = graph.getRoot()->getPositionName();
     
     //Plateau de jeu
-    int lvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD] = {{0}};
+    
     //Joueur courant, colonne selectionnée pour jouer, la ligne jouee, le nombre de coup joues dans la partie
     int lnCurrentPlayer, lnSelectedColomn, lnRowPlayed, lnMoveCounter;
     //Statue du jeux, pas fini, fini avec gagnant, fini match null
@@ -74,7 +79,7 @@ int main(int argc, char **argv)
     //Init ROS
     ros::init(argc, argv, "node2");
     ros::NodeHandle nh;
-    ros::Subscriber sub = nh.subscribe("ma_matrice", 1000, std::boost(matriceCallback, _1, lvBoardGame, &lnSelectedColomn));
+    ros::Subscriber sub = nh.subscribe("ma_matrice", 1000, matriceCallback);
 
     //Initialisation des valeurs
     lnPositionStatus = gnGameNotFinished;
