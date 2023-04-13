@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch>
+
+ <include file="$(find snpi5)/launch/loop.launch" />
+
+<node name="snpi5" pkg="snpi5" type="snpi5_node_V4" respawn="false" output="screen">
+  </node>
+
+  <node name="image_view_1" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/snpi5/output_video_1"/>
+    <param name="autosize" value="true" />
+  </node>
+    <node name="image_view_2" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/snpi5/output_video_2"/>
+    <param name="autosize" value="true" />
+  </node>
+    <node name="image_view_3" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/snpi5/output_video_3"/>
+    <param name="autosize" value="true" />
+  </node>
+  
+</launch>
+

@@ -1,0 +1,5 @@
+---
+uint32 nTarget_1
+geometry_msgs/Point[] pointTarget_1
+uint32 nTarget_2
+geometry_msgs/Point[] pointTarget_2
