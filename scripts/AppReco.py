@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 import speech_recognition as sr
 import time
 import random
@@ -6,12 +9,16 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
+from kivy.graphics import Color, Rectangle
+
 
 class VoiceRecognitionApp(App):
 
     def build(self):
         self.title = 'Puissance 4'
         layout = BoxLayout(orientation='vertical')
+        layout.canvas.before.add(Color(0, 0, 1, 1))
+        layout.canvas.before.add(Rectangle(pos=(0, 0), size=(900, 330)))
         self.label = Label(text='Parlez maintenant...')
         layout.add_widget(self.label)
 
@@ -19,8 +26,8 @@ class VoiceRecognitionApp(App):
         self.grid_layout.spacing = [10, 10]
 
         for i in range(25):
-            self.grid_layout.add_widget(Button(text='', font_size=40))
-
+            self.grid_layout.add_widget(
+                Button(text='', font_size=40, background_color=(0, 0, 0, 1)))
         layout.add_widget(self.grid_layout)
 
         self.col_labels = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
@@ -98,6 +105,7 @@ class VoiceRecognitionApp(App):
     """
     Fonction pour que le robot choisit une case aléa, cette fonction est juste pour le test.
     """
+
     def allumer_case2_alea(self):
         colonne = random.randint(1, 5)
         ordre = 'colonne ' + str(colonne)
