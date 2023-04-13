@@ -256,20 +256,32 @@ void GraphAI::appendChildToParent(string psParent, int pnColunm, string pwPositi
 
 void GraphAI::calculateWeights(vector <string> pvEncounteredNodes, bool pbStaleFinish)
 {
+#if defined(DEBUG_ON)
+    cout << "|||| DEBUG calculate Weight ||||" << endl;
+#endif
     weight_t lsWeights;
     int lnTailleEncounteredNode = pvEncounteredNodes.size(), lnIterator = 0;
     for(string lsCurentPositionName : pvEncounteredNodes)
     {
         lsWeights = msGraphMap[lsCurentPositionName]->getWeight();
         lsWeights.mnGamePlayed += 1;
-        if(!pbStaleFinish && (lnTailleEncounteredNode - lnIterator) % 2 == 1)
+        if(!pbStaleFinish && (lnTailleEncounteredNode - lnIterator) % 2 == 1) 
         {
             lsWeights.mnGameWon += 1;
         }
-        lsWeights.mnVictoryRate = (lsWeights.mnGameWon / lsWeights.mnGamePlayed) * 100;
+        lsWeights.mnVictoryRate = ((float)lsWeights.mnGameWon / (float)lsWeights.mnGamePlayed) * 100;
+#if defined(DEBUG_ON)
+        cout << "lsWeights.mnGamePlayed : " << lsWeights.mnGamePlayed << endl;
+        cout << "lsWeights.mnGameWon : " << lsWeights.mnGameWon << endl;
+        cout << "lsWeights.mnVictoryRate : " << lsWeights.mnVictoryRate << endl;
+        cout << endl;
+#endif
         msGraphMap[lsCurentPositionName]->setWeight(lsWeights.mnGamePlayed, lsWeights.mnGameWon, lsWeights.mnVictoryRate);
         lnIterator++;
     }
+#if defined(DEBUG_ON)
+    cout << endl;
+#endif
 }
 
 /*************   GET and SET    **************/

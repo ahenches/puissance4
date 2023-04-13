@@ -170,6 +170,11 @@ int main(int argc, char **argv) // nb_parties, lwMode
             lsGraph->deleteNodes();
             delete(lsGraph);
         }
+
+        cout << "||||STATS||||" << endl;
+        cout << "Player 1 wins " << lnPlayer1Wins << " times" << endl;
+        cout << "Player 2 wins " << lnPlayer2Wins << " times" << endl;
+        cout << "Stalemate " << lnNbReps - lnPlayer1Wins - lnPlayer2Wins << " times" << endl;
         return 0;
     }
 }
