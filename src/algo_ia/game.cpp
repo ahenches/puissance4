@@ -33,9 +33,6 @@ void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg)
 
 int main(int argc, char **argv)
 {
-    char chem[1000];
-    getcwd(chem, 1000);
-    printf("chemin courant : %s \n",chem);
     int lnGameMode = gn_EASY_MODE;
     string lw_file_path;
     switch (lnGameMode)
