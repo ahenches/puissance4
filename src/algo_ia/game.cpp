@@ -1,15 +1,41 @@
-#include <ros/ros.h> 
-
-#include "graphAI.hpp"
+#include <ros/ros.h>
+#include <std_msgs/Int32MultiArray.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+//#include <boost/bind.hpp>
+
+#include "graphAI.hpp"
 
 using namespace std;
 
-int main()
+void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg) //, int **pvBoardGame, int *pnSelectedColumn)
 {
-    int lnGameMode = gn_HARD_MODE;
+    //int lvMatrice[5][5];
+    int rows = msg->layout.dim[0].size;
+    int cols = msg->layout.dim[1].size;
+    int index = 0;
+    ROS_INFO("Matrice reçue :");
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            ROS_INFO("%d\t", msg->data[index]);
+            //lvMatrice[i][j] = msg->data[index];
+            index++;
+        }
+        ROS_INFO("\n");
+    }
+}
+
+int main(int argc, char **argv)
+{
+    //Init ROS
+    ros::init(argc, argv, "node2");
+    ros::NodeHandle nh;
+    ros::Subscriber sub = nh.subscribe("ma_matrice", 1000, matriceCallback);
+    
+    int lnGameMode = gn_EASY_MODE;
     string lw_file_path;
     switch (lnGameMode)
     {
