@@ -3,13 +3,13 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-//#include <boost/bind.hpp>
+#include <boost/bind.hpp>
 
 #include "graphAI.hpp"
 
 using namespace std;
 
-void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg) //, int **pvBoardGame, int *pnSelectedColumn)
+void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg, int **pvBoardGame, int *pnSelectedColumn)
 {
     //int lvMatrice[5][5];
     int rows = msg->layout.dim[0].size;
@@ -30,10 +30,6 @@ void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg) //, int **p
 
 int main(int argc, char **argv)
 {
-    //Init ROS
-    ros::init(argc, argv, "node2");
-    ros::NodeHandle nh;
-    ros::Subscriber sub = nh.subscribe("ma_matrice", 1000, matriceCallback);
     
     int lnGameMode = gn_EASY_MODE;
     string lw_file_path;
@@ -74,6 +70,11 @@ int main(int argc, char **argv)
     gameStatus lnPositionStatus;
     //Permet de savoir si le coup a ete joué
     bool lbIsPlayed;
+
+    //Init ROS
+    ros::init(argc, argv, "node2");
+    ros::NodeHandle nh;
+    ros::Subscriber sub = nh.subscribe("ma_matrice", 1000, std::boost(matriceCallback, _1, lvBoardGame, &lnSelectedColomn));
 
     //Initialisation des valeurs
     lnPositionStatus = gnGameNotFinished;

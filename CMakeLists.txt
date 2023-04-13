@@ -136,6 +136,10 @@ include_directories(
 # add_executable(${PROJECT_NAME} src/opencv_5.cpp src/fonctions.cpp)
 add_executable(algo src/algo_ia/boardGame.cpp src/algo_ia/graphAI.cpp src/algo_ia/node.cpp src/algo_ia/game.cpp)
 
+target_link_libraries(algo ${catkin_LIBRARIES})
+
+#add_dependencies(${PROJECT_NAME}_node ${PROJECT_NAME}_generate_messages_cpp)
+
 #target_link_libraries(${catkin_LIBRARIES}) 
 
 #add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_generate_messages_cpp)
