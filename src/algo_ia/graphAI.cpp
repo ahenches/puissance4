@@ -224,7 +224,7 @@ int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *ps
 /*/////////////////////////////////////////////////////////////////////////////
 Fonction appendChildToParent()
 
-Auteur : Arnaud HENCHES (IATIC-4)
+Auteur : Maud Lestienne (IATIC-4), Arnaud HENCHES (IATIC-4)
 Nom du projet : Robot Niryo - Puissance 4
 Nom du package : AI
 
@@ -254,6 +254,21 @@ void GraphAI::appendChildToParent(string psParent, int pnColunm, string pwPositi
     }
 }
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction calculateWeights()
+
+Auteur : Maud Lestienne (IATIC-4),  Arnaud HENCHES (IATIC-4)
+Nom du projet : Robot Niryo - Puissance 4
+Nom du package : AI
+
+But de la fonction :
+    calcule la valeur d un noeud en fonction du nombre de partie joue 
+
+Entrées :
+  pvEncounteredNodes : vecteur contenant les noeuds rencontres pendant la partie 
+  pbStaleFinish : vrai si match null sinon faux
+
+/////////////////////////////////////////////////////////////////////////////*/
 void GraphAI::calculateWeights(vector <string> pvEncounteredNodes, bool pbStaleFinish)
 {
 #if defined(DEBUG_ON)
@@ -300,7 +315,7 @@ map<std::string, Node *>& GraphAI::getGraphMap()
 }
 
 /*/////////////////////////////////////////////////////////////////////////////
-Fonction getPositionName()
+Fonction getRoot()
 
 Auteur : Généré automatiquement
 Nom du projet : Robot Niryo - Puissance 4
@@ -312,6 +327,12 @@ Node *GraphAI::getRoot()
     return msRoot;
 }
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction getNode()
+
+Renvoie le noeud de nom pwPositionRepresentation si il est dans le graphe sinon NULL
+
+/////////////////////////////////////////////////////////////////////////////*/
 Node *GraphAI::getNode(string pwPositionRepresentation)
 {
     if(msGraphMap.find(pwPositionRepresentation) != msGraphMap.end()) // Le fils n'existe pas dans le graphe
@@ -324,6 +345,12 @@ Node *GraphAI::getNode(string pwPositionRepresentation)
     }
 }
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction addNodetoMap()
+
+Ajoute le noeud passé en parametre a la Map
+
+/////////////////////////////////////////////////////////////////////////////*/
 void GraphAI::addNodetoMap(Node *psNode)
 {
     msGraphMap[psNode->getPositionName()] = psNode;

@@ -8,7 +8,7 @@ FLAGS=-Wall -g -std=c++17 -fstack-protector
 PRE=DEBUG_OFF
 
 
-all : clean PLAY learning
+all : clean PLAY learning game_in_terminal
 
 PLAY : boardGame.cpp graphAI.cpp node.cpp game.cpp
 		$(CC) -D $(PRE) $(FLAGS) -o $@ $^
@@ -16,7 +16,7 @@ PLAY : boardGame.cpp graphAI.cpp node.cpp game.cpp
 learning : boardGame.cpp graphAI.cpp node.cpp learning.cpp
 		$(CC) -D $(PRE) $(FLAGS) -o $@ $^
 
-test : clean boardGame.cpp graphAI.cpp node.cpp testAI.cpp
+game_in_terminal : boardGame.cpp graphAI.cpp node.cpp game_in_terminal.cpp
 		$(CC) -D $(PRE) $(FLAGS) -o $@ $^
 
 clean : 
