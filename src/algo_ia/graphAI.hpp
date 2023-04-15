@@ -13,6 +13,8 @@
 #include "boardGame.hpp"
 
 #define MAIN_GRAPH "files/graphAI.txt"
+#define MEDIUM_GRAPH "files/graph_mixte_2000.txt"
+#define EASY_GRAPH "graph_rand_250.txt"
 /**
  * @brief classe representant le graphe de l'IA
  * 

@@ -46,10 +46,10 @@ int main(int argc, char **argv)
     switch (lnGameMode)
     {
     case gn_EASY_MODE:
-        lw_file_path = MAIN_GRAPH;
+        lw_file_path = EASY_GRAPH;
         break;
     case gn_MEDIUM_MODE:
-        lw_file_path = MAIN_GRAPH;
+        lw_file_path = MEDIUM_GRAPH;
         break;
     case gn_HARD_MODE:
         lw_file_path = MAIN_GRAPH;
