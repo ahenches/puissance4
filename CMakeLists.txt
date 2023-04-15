@@ -138,6 +138,10 @@ add_executable(algo src/algo_ia/boardGame.cpp src/algo_ia/graphAI.cpp src/algo_i
 
 target_link_libraries(algo ${catkin_LIBRARIES})
 
+add_executable(test_publisher src/algo_ia/publisher.cpp)
+
+target_link_libraries(test_publisher ${catkin_LIBRARIES})
+
 #add_dependencies(${PROJECT_NAME}_node ${PROJECT_NAME}_generate_messages_cpp)
 
 #target_link_libraries(${catkin_LIBRARIES}) 
