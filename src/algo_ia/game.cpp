@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/Int32MultiArray.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -12,11 +13,14 @@ using namespace std;
 int lvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD] = {{0}};
 int lnSelectedColumn;
 
-void receive_int_callback( const std_msgs::Int32::ConstPtr& psMsg)
+
+/*void receive_int_callback( const std_msgs::Int32::ConstPtr& psMsg)
 {
     ROS_INFO("Valeur recu : %d", psMsg->data);
 }
-/*void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg)
+*/
+
+void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg)
 {
     int lvMatrice[5][5];
     int rows = msg->layout.dim[0].size;
@@ -34,7 +38,7 @@ void receive_int_callback( const std_msgs::Int32::ConstPtr& psMsg)
         ROS_INFO("\n");
     }
 }
-*/
+
 int main(int argc, char **argv)
 {
     int lnGameMode = gn_EASY_MODE;
@@ -80,7 +84,7 @@ int main(int argc, char **argv)
     //Init ROS
     ros::init(argc, argv, "node2");
     ros::NodeHandle nh;
-    ros::Subscriber sub = nh.subscribe("ma_matrice", 1000, receive_int_callback);
+    ros::Subscriber sub = nh.subscribe("ma_matrice", 1000, matriceCallback);
     ros::spin();
 
     //Initialisation des valeurs
