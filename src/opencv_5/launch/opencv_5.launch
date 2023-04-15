@@ -2,9 +2,9 @@
 
 <launch>
 
- <include file="$(find cv_camera)/launch/cv_camera.launch" />
+ <include file="/home/ros/catkin_ws/src/cv_camera/launch/cv_camera.launch" />
 
-<node name="opencv_5" pkg="opencv_5" type="opencv_5_node" respawn="false" output="screen">
+<node name="opencv_5" pkg="puissance4" type="vision" respawn="false" output="screen">
   </node>
 
   <node name="image_view_1" pkg="image_view" type="image_view" respawn="false" output="screen">

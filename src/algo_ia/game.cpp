@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     //Init ROS
     ros::init(argc, argv, "node2");
     ros::NodeHandle nh;
-    ros::Subscriber sub = nh.subscribe("ma_matrice", 1000, matriceCallback);
+    ros::Subscriber sub = nh.subscribe("node1/ma_matrice", 1000, matriceCallback);
     ros::spin();
 
     //Initialisation des valeurs

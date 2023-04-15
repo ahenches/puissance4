@@ -573,7 +573,7 @@ class ImageConverter
   	memcpy(&matrice.data[0], &MatriceResultat[0][0], 25 * sizeof(int));
 
   	
-  	
+/*  	
   	 ROS_INFO("Matrice publiée :");
   	for(int i = 0; i < rows; i++)
   	{
@@ -583,24 +583,15 @@ class ImageConverter
       	}
       	ROS_INFO("\n");
   }
-
+*/
   	pub.publish(matrice);
-	
-	
-	ros::spin();
-
-
-	
-	
-	
-
-   
+  
 }
 };
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "image_converter");
+  //ros::init(argc, argv, "image_converter");
   
   // Le publisher pour publier la matrice des couleurs:
   ros::init(argc, argv, "node1");
