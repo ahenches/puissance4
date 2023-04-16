@@ -13,7 +13,6 @@ int main(int argc, char **argv)
     // Mode de jeu de la partie
     int lnGameMode;
     string lwTmp;
-    cout << argc << endl;
     if(argc == 2)
     {
         if(strcmp(argv[1], "f") == 0)
