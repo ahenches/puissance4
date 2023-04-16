@@ -13,6 +13,8 @@
 #include "boardGame.hpp"
 
 #define MAIN_GRAPH "files/graphAI.txt"
+#define MEDIUM_GRAPH "files/graph_mixte_2000.txt"
+#define EASY_GRAPH "graph_rand_250.txt"
 /**
  * @brief classe representant le graphe de l'IA
  * 
@@ -44,7 +46,7 @@ class GraphAI{
     std::vector<std::string> cutString(std::string pwLine, char pwDelimiter);
     void appendChildToParent(std::string psParent, int pnColunm, std::string pwPositionValue); // Si le fils existe déja l'ajouter au parent Sinon on le créer et on le rajoute au parent
     void calculateWeights(std::vector<std::string> pvEncounteredNodes, bool pbStaleFinish);
-    int playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *psActual );
+    int playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *psActual, int pnGameMode );
     int evaluateKnownPosition();
 
     std::map<std::string, Node *>& getGraphMap();

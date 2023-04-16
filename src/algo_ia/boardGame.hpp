@@ -47,6 +47,21 @@
  * 
  */
 #define cnMaxValueWhen4Piece cnValueOf3Piece * 4 + 1
+/**
+ * @brief Mode de jeu facile
+ * 
+ */
+#define gn_EASY_MODE 1
+/**
+ * @brief Mode de jeu moyen
+ * 
+ */
+#define gn_MEDIUM_MODE 2
+/**
+ * @brief Mode de jeu dur
+ * 
+ */
+#define gn_HARD_MODE 3
 
 void gameDisplay(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD]);
 std::tuple<bool, int> play(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD], int pnColomnToPlay, int pnPlayer);

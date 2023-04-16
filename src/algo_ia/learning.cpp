@@ -9,6 +9,8 @@
 
 using namespace std;
 
+int lnPlayer1Wins = 0, lnPlayer2Wins = 0, lnStaleMate = 0;
+
 /*/////////////////////////////////////////////////////////////////////////////
 Fonction doGame()
 
@@ -57,21 +59,32 @@ void doGame(vector<GraphAI *> *lvGraphs, char *lwMode)
             {
                 const int lnMiddleVal = RAND_MAX / 2; 
                 const int lnRandomVal = rand();
+#if defined(DISPLAY_ON)
                 cout << "VALEUR : " << (lnRandomVal - lnMiddleVal) << endl;
+#endif
                 if(lnRandomVal > lnMiddleVal)
                 {
+#if defined(DISPLAY_ON)
                     cout << "Deplacement erratiques" << endl;
+#endif
                     lnSelectedColomn = moveAtRandom(lvBoardGame);
                 }
                 else
                 {
+#if defined(DISPLAY_ON)
                     cout << "Deplacements réfléchis " << endl;
+#endif
                     lnSelectedColomn = calculateBestMove(lvBoardGame);
                 }
             }
             tie(lbIsPlayed,lnRowPlayed) = play(lvBoardGame,lnSelectedColomn, lnCurrentPlayer);
         }
+#if defined(DISPLAY_ON)
         cout << "Ceci est la colonne jouée " << lnSelectedColomn << endl;
+#endif
+#if defined(DEBUG_ON)
+        cout << "DEBUGGING :: lsActual : " << lsActual << endl;
+#endif
         string lwNextNodeRepr = ((*lvGraphs)[0])->getNode(lsActual)->calculateNewPositionValue(lnSelectedColomn, lnMoveCounter);
 	    for (GraphAI * lsGraph : *lvGraphs)
             lsGraph->appendChildToParent(lsActual, lnSelectedColomn, lwNextNodeRepr);
@@ -85,15 +98,21 @@ void doGame(vector<GraphAI *> *lvGraphs, char *lwMode)
         
         lnMoveCounter++;
     }
-
     if (lnPositionStatus != gnStaleMate)
     {
+        if (lnCurrentPlayer == 1)
+            lnPlayer1Wins ++;
+        else if (lnCurrentPlayer == 2)
+            lnPlayer2Wins ++;
+        else 
+            cout << "ERROR dans lnCurrentPlayer" << endl;
         cout << lnCurrentPlayer << " gagne !" << endl;
         for (GraphAI * lsGraph : *lvGraphs)
             lsGraph->calculateWeights(lvEncounteredPositions, false);
     }
     else 
     {
+        lnStaleMate ++;
         cout << "Le Match est ex aequo  " << endl;
         for (GraphAI * lsGraph : *lvGraphs)
             lsGraph->calculateWeights(lvEncounteredPositions, true);
@@ -115,9 +134,9 @@ int main(int argc, char **argv) // nb_parties, lwMode
         const int lnGraphParticularWordLength = 12 + 1 + strlen(lwMode) + 4 + strlen(lwNbReps) + 1;
         char lwGraphParticular[lnGraphParticularWordLength];
         strcat(lwGraphParticular, "files/graph_");  
-        strcat(lwGraphParticular, lwMode);  
-        strcat(lwGraphParticular, "_");  
-        strcat(lwGraphParticular, lwNbReps);        
+        strcat(lwGraphParticular, lwMode);
+        strcat(lwGraphParticular, "_");
+        strcat(lwGraphParticular, lwNbReps);
         strcat(lwGraphParticular, ".txt");        
         
         srand(time(NULL));
@@ -151,6 +170,11 @@ int main(int argc, char **argv) // nb_parties, lwMode
             lsGraph->deleteNodes();
             delete(lsGraph);
         }
+
+        cout << "||||STATS||||" << endl;
+        cout << "Player 1 wins " << lnPlayer1Wins << " times" << endl;
+        cout << "Player 2 wins " << lnPlayer2Wins << " times" << endl;
+        cout << "Stalemate " << lnNbReps - lnPlayer1Wins - lnPlayer2Wins << " times" << endl;
         return 0;
     }
 }

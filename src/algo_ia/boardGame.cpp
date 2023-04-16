@@ -412,14 +412,17 @@ int moveAtRandom(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD])
         if (lbIsPiecePlayed)
         {
             lvPossibleMoves.push_back(liIndexColumn);
+            pvBoardGame[lnRowOfPiece][liIndexColumn] = 0; // reset le coup ayant été testé
         }
         else 
         {
-
         }
-        pvBoardGame[lnRowOfPiece][liIndexColumn] = 0; // reset le coup ayant été testé
     }
-    return lvPossibleMoves[rand() % lvPossibleMoves.size()];
+#ifdef DEBUG_ON
+    cout << "DEBUGGING :: lvPossibleMoves.size() : " << lvPossibleMoves.size() << endl;
+#endif
+    const int lvMoveChosen = rand() % lvPossibleMoves.size();
+    return lvPossibleMoves[lvMoveChosen];
 
 }
 /*/////////////////////////////////////////////////////////////////////////////

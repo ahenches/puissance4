@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+
+<launch>
+
+	<node pkg="rosbag" type="play" name="player" output="screen" args="-l --clock /home/ros/catkin_ws/bagfiles/2021-10-23-10-46-24.bag"/>
+
+</launch>

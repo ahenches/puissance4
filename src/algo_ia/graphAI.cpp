@@ -173,7 +173,7 @@ Sortie :
   lnSelectedColomn : la colonne selectionnee pour jouer
 
 /////////////////////////////////////////////////////////////////////////////*/
-int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *psActual )
+int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *psActual, int pnGameMode )
 {
     int lwChildSelected = -1;
     int lnSelectedColomn, liIndex;
@@ -208,7 +208,14 @@ int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *ps
     }
     else 
     {
-        lnSelectedColomn = calculateBestMove(pvBoardGame);
+        if(pnGameMode == gn_HARD_MODE)
+        {
+            lnSelectedColomn = calculateBestMove(pvBoardGame);
+        }
+        else
+        {
+            lnSelectedColomn = moveAtRandom(pvBoardGame);
+        }
     }
 
     return lnSelectedColomn ;
@@ -217,7 +224,7 @@ int GraphAI::playAI(int pvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD],  Node *ps
 /*/////////////////////////////////////////////////////////////////////////////
 Fonction appendChildToParent()
 
-Auteur : Arnaud HENCHES (IATIC-4)
+Auteur : Maud Lestienne (IATIC-4), Arnaud HENCHES (IATIC-4)
 Nom du projet : Robot Niryo - Puissance 4
 Nom du package : AI
 
@@ -247,22 +254,49 @@ void GraphAI::appendChildToParent(string psParent, int pnColunm, string pwPositi
     }
 }
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction calculateWeights()
+
+Auteur : Maud Lestienne (IATIC-4),  Arnaud HENCHES (IATIC-4)
+Nom du projet : Robot Niryo - Puissance 4
+Nom du package : AI
+
+But de la fonction :
+    calcule la valeur d un noeud en fonction du nombre de partie joue 
+
+Entrées :
+  pvEncounteredNodes : vecteur contenant les noeuds rencontres pendant la partie 
+  pbStaleFinish : vrai si match null sinon faux
+
+/////////////////////////////////////////////////////////////////////////////*/
 void GraphAI::calculateWeights(vector <string> pvEncounteredNodes, bool pbStaleFinish)
 {
+#if defined(DEBUG_ON)
+    cout << "|||| DEBUG calculate Weight ||||" << endl;
+#endif
     weight_t lsWeights;
     int lnTailleEncounteredNode = pvEncounteredNodes.size(), lnIterator = 0;
     for(string lsCurentPositionName : pvEncounteredNodes)
     {
         lsWeights = msGraphMap[lsCurentPositionName]->getWeight();
         lsWeights.mnGamePlayed += 1;
-        if(!pbStaleFinish && (lnTailleEncounteredNode - lnIterator) % 2 == 1)
+        if(!pbStaleFinish && (lnTailleEncounteredNode - lnIterator) % 2 == 1) 
         {
             lsWeights.mnGameWon += 1;
         }
-        lsWeights.mnVictoryRate = (lsWeights.mnGameWon / lsWeights.mnGamePlayed) * 100;
+        lsWeights.mnVictoryRate = ((float)lsWeights.mnGameWon / (float)lsWeights.mnGamePlayed) * 100;
+#if defined(DEBUG_ON)
+        cout << "lsWeights.mnGamePlayed : " << lsWeights.mnGamePlayed << endl;
+        cout << "lsWeights.mnGameWon : " << lsWeights.mnGameWon << endl;
+        cout << "lsWeights.mnVictoryRate : " << lsWeights.mnVictoryRate << endl;
+        cout << endl;
+#endif
         msGraphMap[lsCurentPositionName]->setWeight(lsWeights.mnGamePlayed, lsWeights.mnGameWon, lsWeights.mnVictoryRate);
         lnIterator++;
     }
+#if defined(DEBUG_ON)
+    cout << endl;
+#endif
 }
 
 /*************   GET and SET    **************/
@@ -281,7 +315,7 @@ map<std::string, Node *>& GraphAI::getGraphMap()
 }
 
 /*/////////////////////////////////////////////////////////////////////////////
-Fonction getPositionName()
+Fonction getRoot()
 
 Auteur : Généré automatiquement
 Nom du projet : Robot Niryo - Puissance 4
@@ -293,6 +327,12 @@ Node *GraphAI::getRoot()
     return msRoot;
 }
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction getNode()
+
+Renvoie le noeud de nom pwPositionRepresentation si il est dans le graphe sinon NULL
+
+/////////////////////////////////////////////////////////////////////////////*/
 Node *GraphAI::getNode(string pwPositionRepresentation)
 {
     if(msGraphMap.find(pwPositionRepresentation) != msGraphMap.end()) // Le fils n'existe pas dans le graphe
@@ -305,6 +345,12 @@ Node *GraphAI::getNode(string pwPositionRepresentation)
     }
 }
 
+/*/////////////////////////////////////////////////////////////////////////////
+Fonction addNodetoMap()
+
+Ajoute le noeud passé en parametre a la Map
+
+/////////////////////////////////////////////////////////////////////////////*/
 void GraphAI::addNodetoMap(Node *psNode)
 {
     msGraphMap[psNode->getPositionName()] = psNode;

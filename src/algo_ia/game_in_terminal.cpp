@@ -1,47 +1,46 @@
-#include <ros/ros.h>
-#include <std_msgs/Int32.h>
-#include <std_msgs/Int32MultiArray.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include <boost/bind.hpp>
 #include <unistd.h>
+#include <string.h>
 
 #include "graphAI.hpp"
 
 using namespace std;
-int lvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD] = {{0}};
-int lnSelectedColumn;
-
-
-/*void receive_int_callback( const std_msgs::Int32::ConstPtr& psMsg)
-{
-    ROS_INFO("Valeur recu : %d", psMsg->data);
-}
-*/
-
-void matriceCallback(const std_msgs::Int32MultiArray::ConstPtr& msg)
-{
-    int lvMatrice[5][5];
-    int rows = msg->layout.dim[0].size;
-    int cols = msg->layout.dim[1].size;
-    int index = 0;
-    ROS_INFO("Matrice reçue :");
-    for(int i = 0; i < rows; i++)
-    {
-        for(int j = 0; j < cols; j++)
-        {
-            ROS_INFO("%d\t", msg->data[index]);
-            lvMatrice[i][j] = msg->data[index];
-            index++;
-        }
-        ROS_INFO("\n");
-    }
-}
 
 int main(int argc, char **argv)
 {
-    int lnGameMode = gn_EASY_MODE;
+    // Mode de jeu de la partie
+    int lnGameMode;
+    string lwTmp;
+    if(argc == 2)
+    {
+        if(strcmp(argv[1], "f") == 0)
+        {
+            lnGameMode = gn_EASY_MODE;
+            cout << "MODE : FACILE" << endl;
+        }
+        else if(strcmp(argv[1], "m") == 0)
+        {
+            lnGameMode = gn_MEDIUM_MODE;
+            cout << "MODE : MOYEN" << endl;
+        }
+        else if(strcmp(argv[1], "d") == 0)
+        {
+            lnGameMode = gn_HARD_MODE;
+            cout << "MODE : DIFFICILE" << endl;
+        }
+        else {
+            lnGameMode = gn_MEDIUM_MODE;
+            cout << "MODE : MOYEN" << endl;
+        }
+    }
+    else
+    {
+       lnGameMode = gn_MEDIUM_MODE;
+       cout << "MODE : MOYEN" << endl;
+    }
+     
     string lw_file_path;
     switch (lnGameMode)
     {
@@ -76,19 +75,14 @@ int main(int argc, char **argv)
     string lsActual = mainGraph.getRoot()->getPositionName();
     
     //Plateau de jeu
-    
+    int lvBoardGame[cnSIZE_OF_BOARD][cnSIZE_OF_BOARD] = {{0}};
+
     //Joueur courant, colonne selectionnée pour jouer, la ligne jouee, le nombre de coup joues dans la partie
     int lnCurrentPlayer, lnSelectedColomn, lnRowPlayed, lnMoveCounter;
     //Statue du jeux, pas fini, fini avec gagnant, fini match null
     gameStatus lnPositionStatus;
     //Permet de savoir si le coup a ete joué
     bool lbIsPlayed;
-
-    //Init ROS
-    ros::init(argc, argv, "node2");
-    ros::NodeHandle nh;
-    ros::Subscriber sub = nh.subscribe("node1/ma_matrice", 1000, matriceCallback);
-    ros::spin();
 
     //Initialisation des valeurs
     lnPositionStatus = gnGameNotFinished;
@@ -97,7 +91,7 @@ int main(int argc, char **argv)
     
     //Affichage du plateau
     gameDisplay(lvBoardGame);
-    // while(lnPositionStatus == gnGameNotFinished)
+    while(lnPositionStatus == gnGameNotFinished)
     {
         lbIsPlayed = false;
 
@@ -118,9 +112,14 @@ int main(int argc, char **argv)
             
             while (!lbIsPlayed)
             {
-                cout << "Sur quelle colonne voulez vous jouez (0 à 4)"<< endl;
-                cin >> lnSelectedColomn;
-                lnSelectedColomn = lnSelectedColomn % 5;
+                do
+                {
+                    cout << "Sur quelle colonne voulez vous jouez (1 à 5)"<< endl;
+                    cin >> lwTmp;
+                } while (lwTmp.compare("1") != 0 && lwTmp.compare("2") != 0 && lwTmp.compare("3") != 0 && lwTmp.compare("4") != 0 && lwTmp.compare("5") != 0);
+                
+                lnSelectedColomn = stoi(lwTmp);
+                lnSelectedColomn = lnSelectedColomn - 1;
                 tie(lbIsPlayed,lnRowPlayed) = play(lvBoardGame,lnSelectedColomn,lnCurrentPlayer);
                 if (!lbIsPlayed)
                     cout << "Colonne Pleine !" << endl;
